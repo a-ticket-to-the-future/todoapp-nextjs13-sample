@@ -1,6 +1,6 @@
-import { Todo } from "./types";
+import { Task } from "./types";
 
-export const getAllTodos = async (): Promise<Todo[]> => {
+export const getAllTodos = async (): Promise<Task[]> => {
 // : Promise<Todo[]>  型定義
     const res = await fetch(`http://localhost:3001/tasks`,{cache:"no-store"});
     // {cache:"no-store"}これを指定することによってSSRになる
@@ -10,7 +10,7 @@ export const getAllTodos = async (): Promise<Todo[]> => {
     // 今回の場合はSSRもしくはCSR（クライアントサイドレンダリング）、ISRが適している。
     // CSR使うならuseEffect(() =>{   },[]);
     // SSRは初回読み込み時が速い。CSRは２回目以降が速くなりやすいかも。。。。
-    const todos = res.json();
+    const tasks = res.json();
 
-    return todos;
+    return tasks;
 };
