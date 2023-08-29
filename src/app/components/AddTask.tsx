@@ -1,7 +1,7 @@
 "use client";
 
 import { addTodo } from '@/api';
-import { todo } from 'node:test';
+// import { todo } from 'node:test';
 import React, { ChangeEvent, FormEvent, useState } from 'react'
 import {v4 as uuidv4} from "uuid";
 
@@ -11,15 +11,20 @@ const AddTask = () => {
     // useStateはclientサイドで動くものなので最上部に"use client"が必要になる！
 
     const handleSubmit = async (e:FormEvent) => {
+        //onSubmitボタン押されるとページが更新されちゃうので阻止したい。。。とのことです
         e.preventDefault();
 
         await addTodo({id:uuidv4(),text:taskTitle});
+        //Task.id,Task.textなのでは？と思ったのだけどどうだろう？？
+        // <form />の中の<input />のonChangeイベント /
+        // 入力されるたびにsetTaskTitleに入れてtaskTitleが更新されるのを addTodoに追加する。
 
         // 入力後にinputタグが空になるように
         setTaskTitle("");
 
 
     };
+
 
   return (
     <form className='mb-4 space-y-3 ' onSubmit={handleSubmit}>

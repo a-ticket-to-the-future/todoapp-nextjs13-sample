@@ -1,21 +1,74 @@
+"use client"
+
+import { editTodo } from '@/api';
 import { Task } from '@/types';
-import React from 'react'
-import { Interface } from 'readline';
+import React, { useState } from 'react'
+// import { Interface } from 'readline';
 
 
 interface  TodoProps {
-    todo: Task;
+    task: Task;
 }
 
 
 
-const Todo = ({todo}:TodoProps) => {
+const Todo = ({task}:TodoProps) => {
+
+    const [isEditing , setIsEditing] = useState(false);
+
+    const [editedTaskTitle , setEditedTaskTitle] = useState(task.text);
+
+    
+
+    const handleEdit = async () => {
+        //editボタンを押したら編集中にしたいので
+        setIsEditing(true);
+
+
+    };
+
+    const handleSave = async () => {
+        //saveボタンを押したときに入力した情報を更新したいので、
+        // api.tsのeditTodoを呼び出すためにここに記述する
+
+        await editTodo(task.id,editedTaskTitle);
+        // api.tsで記述したeditTodoの()内に従い、id:string,text:newtextを上記のように
+        // 昨晩、なぜかうまく行かなかったやつができたぞーーー。（笑）
+
+        //editボタンを押したら編集中にしたいので
+        setIsEditing(false);
+
+
+    };
+
+
+
   return (
-    <li key={todo.id}
-             className='flex justify-between p-4 bg-white border-l-4 border-blue-500 rounded shadow'>
-        <span>{todo.text}</span>
+    <li key={task.id}
+             className='flex justify-between p-4 bg-white border-l-4 border-blue-500 rounded shadow'
+             >
+        {isEditing ?  (<input 
+                        type="text" 
+                        className='mr-2 py-1 px-2 rounded border-gray-400 border'
+                        value={editedTaskTitle}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+                            setEditedTaskTitle(e.target.value)
+                        }
+                        />) : (<span>{task.text}</span>)}
+        
         <div>
-            <button className='text-green-500 mr-3'>edit</button>
+            {isEditing ? (<button className='text-blue-500 mr-3'
+                                  onClick={handleSave}
+                          >
+                            save
+                          </button>) : (
+                          <button className='text-green-500 mr-3'
+                            onClick={handleEdit}
+                          >
+                            edit
+                          </button>
+                          )}
+            
         <button className='text-red-500 '>Delete</button>
 
         </div>

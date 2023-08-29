@@ -13,7 +13,7 @@ const TodoList = ({tasks} : TodoListProps) => {
     <ul className='space-y-3 '>
 
         {tasks.map((task) => (
-            <Todo key={task.id} todo = {task}/>
+            <Todo key={task.id} task = {task}/>
 ))}
 
       
