@@ -1,8 +1,8 @@
 "use client"
 
-import { editTodo } from '@/api';
+import { deleteTodo, editTodo } from '@/api';
 import { Task } from '@/types';
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 // import { Interface } from 'readline';
 
 
@@ -13,12 +13,23 @@ interface  TodoProps {
 
 
 const Todo = ({task}:TodoProps) => {
+    // editボタン押したら自動でフォーカスされるようにする
+    const ref = useRef<HTMLInputElement>(null);
 
     const [isEditing , setIsEditing] = useState(false);
 
     const [editedTaskTitle , setEditedTaskTitle] = useState(task.text);
 
-    
+    useEffect(() => {
+        if(isEditing){
+            ref.current?.focus(); //nullの可能性があるので?マークを忘れない 
+            // ?:オプショナルチェーンと言う
+            // オプショナルチェーンはそこにある時だけフォーカスにアクセスできるようになる
+        }
+
+    },[isEditing]); //編集しようとeditボタン押したときに発火
+
+
 
     const handleEdit = async () => {
         //editボタンを押したら編集中にしたいので
@@ -41,6 +52,10 @@ const Todo = ({task}:TodoProps) => {
 
     };
 
+    const handleDelete  = async () => {
+        await deleteTodo(task.id);
+    };
+
 
 
   return (
@@ -48,6 +63,7 @@ const Todo = ({task}:TodoProps) => {
              className='flex justify-between p-4 bg-white border-l-4 border-blue-500 rounded shadow'
              >
         {isEditing ?  (<input 
+                        ref={ref}
                         type="text" 
                         className='mr-2 py-1 px-2 rounded border-gray-400 border'
                         value={editedTaskTitle}
@@ -69,7 +85,7 @@ const Todo = ({task}:TodoProps) => {
                           </button>
                           )}
             
-        <button className='text-red-500 '>Delete</button>
+        <button className='text-red-500 ' onClick={handleDelete}>Delete</button>
 
         </div>
       </li>
