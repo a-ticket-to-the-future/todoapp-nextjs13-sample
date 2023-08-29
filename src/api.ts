@@ -48,3 +48,20 @@ export const addTodo = async (todo:Task): Promise<Task> => {
     
         return updatedTodo;
     };
+
+
+    export const deleteTodo = async (id:string): Promise<Task> => {
+    
+        const res = await fetch(`http://localhost:3001/tasks/${id}`,{
+            method: "DELETE",
+            headers:{
+                "Content-type": "application/json",
+                // JSON形式をつけますよ。の時はこのheaderをつけないと動かないそうです
+            },
+            
+        });
+        //todos.jsonのtasks{}このなかのtextにnewTextとして更新する
+        const deleteTodo = res.json();
+    
+        return deleteTodo;
+    };
