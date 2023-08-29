@@ -22,6 +22,7 @@ export const addTodo = async (todo:Task): Promise<Task> => {
             method: "POST",
             headers:{
                 "Content-type": "application/json",
+                // JSON形式をつけますよ。の時はこのheaderをつけないと動かないそうです
             },
             body:JSON.stringify(todo),
         });
@@ -29,4 +30,21 @@ export const addTodo = async (todo:Task): Promise<Task> => {
         const newTodo = res.json();
     
         return newTodo;
+    };
+
+
+    export const editTodo = async (id:string,newText:string): Promise<Task> => {
+    
+        const res = await fetch(`http://localhost:3001/tasks/${id}`,{
+            method: "PUT",
+            headers:{
+                "Content-type": "application/json",
+                // JSON形式をつけますよ。の時はこのheaderをつけないと動かないそうです
+            },
+            body:JSON.stringify({text : newText}),
+        });
+        //todos.jsonのtasks{}このなかのtextにnewTextとして更新する
+        const updatedTodo = res.json();
+    
+        return updatedTodo;
     };
